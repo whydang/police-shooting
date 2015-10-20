@@ -21,17 +21,17 @@ var getData = function() {
 	  data: 'hmm',
 	  success: function(data, jqXHR, textStatus) {
 	  	alert('AJAX call complete ' + data[0].County);
+	  		customBuild(data);
 	  },
 	  dataType: 'json'
 	});
 
   	// When your request is successful, call your customBuild function
-  	customBuild();
 
 }
 
 // Loop through your data and add the appropriate layers and points
-var customBuild = function() {
+var customBuild = function(data) {
 	// Be sure to add each layer to the map
 	var Unkown = new L.LayerGroup([]);
 	var White = new L.LayerGroup([]);
@@ -41,8 +41,16 @@ var customBuild = function() {
 	var Hawaiian = new L.LayerGroup([]);
 
 	for (var i = 0; i < data.length; i++) {
-		var value = data[i].Race;
-		alert(value);
+		var raceValue = data[i].Race;
+		var longitude = data[i].lng;
+		var latitude = data[i].lat;
+
+		var circle = new L.circleMarker([latitude, longitude]).bindPopup(data[i].Summary);
+		//circle.setStyle({fillColor: #FF0000});
+
+		if (raceValue == null) {
+			circle.addTo(Unkown);
+		}
 	}
 
 	// Once layers are on the map, add a leaflet controller that shows/hides layers
