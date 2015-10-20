@@ -1,4 +1,22 @@
 /* You'll probably want to add some styles here */
+
+h1 {
+	font-weight: bold;
+	padding; 2px;
+}
+
+#info {
+	text-align: center;
+}
+
+.blue {
+	color:blue;
+}
+
+.red {
+	color:red;
+}
+
 #container {
 	height:800px;
 }
