@@ -18,8 +18,7 @@ var getData = function(map) {
 	$.ajax({
 	  url: 'data/response.json',
 	  data: 'hmm',
-	  success: function(data, jqXHR, textStatus) {
-	  	alert('AJAX call complete ' + data[0].County);
+	  success: function(data) {
 	  		customBuild(map, data);
 	  },
 	  dataType: 'json'
@@ -41,7 +40,12 @@ var customBuild = function(map, data) {
 		"Native Hawaiian or Other Pacific Islander": new L.LayerGroup([])
 	};
 
-	//raceObj["Unknown"].addTo(map);
+	// used to keep track of data into the table
+	var men = 0;
+	var whitemen = 0;
+	var women = 0;
+	var whitewomen = 0;
+
 
 	for (var i = 0; i < data.length; i++) {
 		var raceValue = data[i].Race || "Unknown";
@@ -49,10 +53,20 @@ var customBuild = function(map, data) {
 		var latitude = data[i].lat;
 
 		var circle = new L.circleMarker([latitude, longitude]).bindPopup(data[i].Summary);
-		if (data[i]["Victim's Gender"] == 'Female') {
-			circle.setStyle({fillColor: '#FF0000'});
-		} else {
+		circle.setStyle({radius: 10});
+		if (data[i]["Victim's Gender"] == 'Male') {
+			men++;
+			if(data[i]["Race"] == 'White') {
+				whitemen++;
+			}
 			circle.setStyle({fillColor: '#001EFF'});
+
+		} else {
+			women++;
+			if(data[i]["Race"] == 'White') {
+				whitewomen++;
+			}
+			circle.setStyle({fillColor: '#FF0000'});
 		}
 
 		circle.addTo(raceObj[raceValue]);
@@ -64,6 +78,16 @@ var customBuild = function(map, data) {
 
 	// Once layers are on the map, add a leaflet controller that shows/hides layers
 	L.control.layers(null, raceObj).addTo(map);
+
+	// overrides data into the table
+	var white_male = document.getElementById("white_male");
+	var white_female = document.getElementById("white_female");
+	var rest_male = document.getElementById("rest_male");
+	var rest_female = document.getElementById("rest_female");
+	white_male.innerHTML = whitemen;
+	white_female.innerHTML = whitewomen;
+	rest_male.innerHTML = men - whitemen;
+	rest_female.innerHTML = women - whitewomen;
 }
 
 

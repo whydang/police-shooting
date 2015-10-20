@@ -2,10 +2,11 @@
 
 h1 {
 	font-weight: bold;
-	padding; 2px;
+	padding; 5x;
+
 }
 
-#info {
+.descript {
 	text-align: center;
 }
 
